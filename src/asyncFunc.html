@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现一个async await</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+
+    async function fn () {
+        let res = await 1
+        throw 3
+        // return res
+    }
+
+    function* test(){
+        let res = yield 1
+        let sec = yield res
+        throw 3
+        // return sec
+    } 
+
+    function asyncFunc(generatorFunc) {
+        return function () {
+            let generator = generatorFunc.apply(this,arguments)
+
+            const handle = ({done,value})=>{
+                if(done) {
+                    return Promise.resolve(value)
+                }
+                return Promise.resolve(value).then(res=>{
+                    return handle(generator.next(res))
+                },err=>{
+                    return handle(generator.throw(err))
+                })
+            }
+            return handle(generator.next())
+        }
+    }
+    fn().then(res=>{
+        console.log(res)
+    }).catch(err=>{
+        console.log(err)
+    })
+    asyncFunc(test)().then(res=>{
+        console.log(res)
+    }).catch(err=>{
+        console.log(err)
+    })
+</script>
