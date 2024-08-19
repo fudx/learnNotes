@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现一个Object.create</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+    function myObjectCreate(proto) {
+    if (proto === null || typeof proto !== 'object') {
+        throw new TypeError('Object prototype may only be an Object or null.');
+    }
+
+    function F() {} // 创建一个临时构造函数
+    F.prototype = proto; // 将传入的对象设置为原型
+    return new F(); // 返回新对象，原型设置为传入的 proto
+}
+
+// 示例使用
+const person = {
+    isHuman: false,
+    printIntroduction: function() {
+        console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+    }
+};
+
+const me = myObjectCreate(person);
+me.name = 'Matthew';
+me.isHuman = true;
+
+me.printIntroduction();
+// 输出: My name is Matthew. Am I human? true
+
+</script>

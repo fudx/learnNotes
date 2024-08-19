@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现new</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+//     创建一个新对象。
+//     将新对象的原型链接到构造函数的原型。
+//     通过 apply 调用构造函数，并将 this 绑定到新对象。
+//     根据返回值决定返回新对象还是构造函数返回的对象。
+
+
+function myNew(constructor, ...args) {
+    // 1. 创建一个新的空对象
+    const obj = {};
+
+    // 2. 将新对象的原型指向构造函数的原型
+    obj.__proto__ = constructor.prototype;
+
+    // 3. 使用 apply 调用构造函数，将 this 绑定到新对象，并传递参数
+    const result = constructor.apply(obj, args);
+
+    // 4. 如果构造函数返回了一个对象，则返回该对象，否则返回新创建的对象
+    return result !== null && (typeof result === 'object' || typeof result === 'function') ? result : obj;
+}
+
+// 示例使用
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+const person = myNew(Person, 'Alice', 30);
+console.log(person.name); // 输出: "Alice"
+console.log(person.age);  // 输出: 30
+console.log(person instanceof Person); // 输出: true
+
+</script>
