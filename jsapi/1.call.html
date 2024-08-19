@@ -39,7 +39,7 @@ Function.prototype.mycall = function(context,...args) {
     }
   	let fnSymbol = Symbol()
   	context.fnSymbol = this
-  	let result = context.fnSymbol()
+  	let result = context.fnSymbol(...args)
   	delete contexxt.fnSymbol
   	return result
 }

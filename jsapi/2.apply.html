@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现apply</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+   Function.prototype.myApply = function(context, args) {
+        context = context || window
+        const symbol = Symbol()
+        context[symbol] = this
+        let result
+        if(Array.isArray(args)) {
+            result = context[symbol](...args)
+        }  
+        else {
+            result = context[symbol]()
+        }
+        delete context[symbol]
+        return result
+    };
+
+// 示例使用
+function greet(message, punctuation) {
+    return `${message}, ${this.name}${punctuation}`;
+}
+
+const person = { name: 'Alice' };
+const result = greet.myApply(person, ['Hello', '!']);
+console.log(result);  // 输出: "Hello, Alice!"
+
+</script>
