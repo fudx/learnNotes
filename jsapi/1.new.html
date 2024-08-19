@@ -10,6 +10,39 @@
 </body>
 </html>
 <script>
+// var value = 1
+// var obj = {
+// 	value: 2
+// }
+// function foo (o) {
+//     console.log(o)
+// 	console.log(o.value)
+// }
+// foo.call(null) // 1
+var value = 1
+var obj = {
+	value: 2
+}
+function foo (o) {
+	console.log(this.value)
+	return {
+      value: this.value
+  }
+}
+var c = foo.call(obj) // 2 {value: 2}
+console.log(c)
+
+// 实现
+Function.prototype.mycall = function(context,...args) {
+  	if(context === null || context === undefined) {
+      	context = window
+    }
+  	let fnSymbol = Symbol()
+  	context.fnSymbol = this
+  	let result = context.fnSymbol()
+  	delete contexxt.fnSymbol
+  	return result
+}
 
     
 </script>
