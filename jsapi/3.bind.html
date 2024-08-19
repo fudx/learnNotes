@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bind的实现</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+Function.prototype.myBind = function (content,...args1) {
+    let self = this
+    const fn = function (...args2) {
+        return self.apply(this instanceof fn ? this : content,[...args1,...args2])
+    }
+    if(self.prototype) {
+        fn.prototype = Object.create(self.prototype)
+    }
+    return fn
+}
+    // 示例使用
+function greet(greeting, punctuation) {
+    return `${greeting}, ${this.name}${punctuation}`;
+}
+
+const person = { name: 'Alice' };
+const greetAlice = greet.myBind(person, 'Hello');
+
+console.log(greetAlice('!'));  // 输出: "Hello, Alice!"
+
+// 作为构造函数使用
+function Person(name) {
+    this.name = name;
+}
+const BoundPerson = Person.myBind(null);
+const newPerson = new BoundPerson('Bob');
+console.log(newPerson.name);  // 输出: "Bob"
+</script>
