@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现eventEmitter</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+    class EventEmitter {
+        constructor() {
+            this.events = {}
+        }
+
+        on(event,listener) {
+            if(!this.events[event]){
+                this.events[event] = []
+            }
+            this.events[event].push(listener)
+        }
+        off(event) {
+            if(!this.events[event]) {
+                return
+            }
+            delete this.events[event]
+        }
+        emit(event,...args) {
+            if(!this.events[event]) {
+                return
+            }
+            this.events[event].forEach(listener => {
+                listener(...args)
+            });
+        }
+        once(event,listener) {
+            const onceWrapper = (...args) => {
+                listener(...args);
+                this.off(event); // 事件触发后移除监听器
+            };
+            this.on(event, onceWrapper);
+        }
+    }
+    const event = new EventEmitter()
+    event.on('on',(name)=>{
+        console.log('name is' , name)
+    })
+    event.on('on',(age)=>{
+        console.log('age is' , age)
+    })
+    event.once('off',(age)=>{
+        console.log('off is' , age)
+    })
+    event.once('off',(age)=>{
+        console.log('agoffe iss' , age)
+    })
+    event.emit('on','yy')
+    event.emit('off','yy')
+    event.emit('off','yy')
+
+</script>
