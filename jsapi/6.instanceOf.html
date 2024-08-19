@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>实现instanceOf功能</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  function myInstanceOf(obj, constructor) {
+    // 如果 obj 是 null 或者 undefined，直接返回 false
+    if (obj == null) return false;
+
+    // 获取对象的原型
+    let proto = Object.getPrototypeOf(obj);
+
+    // 一直循环检查原型链
+    while (proto !== null) {
+      if (proto === constructor.prototype) {
+        return true; // 如果找到了相同的原型，返回 true
+      }
+      proto = Object.getPrototypeOf(proto); // 沿着原型链向上查找
+    }
+
+    return false; // 如果遍历完原型链还没找到，返回 false
+  }
+
+  // 示例使用
+  function Person(name) {
+    this.name = name;
+  }
+
+  const person = new Person("Alice");
+
+  console.log(myInstanceOf(person, Person)); // 输出: true
+  console.log(myInstanceOf(person, Object)); // 输出: true
+  console.log(myInstanceOf(person, Array)); // 输出: false
+  console.log(myInstanceOf(null, Person)); // 输出: false
+  console.log(myInstanceOf(undefined, Person)); // 输出: false
+</script>
