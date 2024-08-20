@@ -12,4 +12,10 @@ Function.prototype.myBind = function (content,...args1) {
 }
 ```
 
+### instanceOf 实现
+```
+left instanceOf right
+
+right.prototype里如果有left 则返回true 否则是right
+```
 2024.8.20
