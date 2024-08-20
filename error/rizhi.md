@@ -19,3 +19,20 @@ left instanceOf right
 right.prototype里如果有left 则返回true 否则是right
 ```
 2024.8.20
+
+### eventEmitter once修改 要用箭头函数
+```
+ class eventEmitter {
+        constructor () {
+            this.events = {}
+        }
+        ...
+        once(event,listener) {
+            const wrap =  (args) =>{
+                listener(args)
+                this.off(event)
+            }
+            this.on(event,wrap)
+        }
+    }
+```
