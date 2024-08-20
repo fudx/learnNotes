@@ -36,3 +36,23 @@ right.prototype里如果有left 则返回true 否则是right
         }
     }
 ```
+
+### 深拷贝
+```
+    function deepCopy(obj,map = new WeakMap()) {
+        if(typeof obj != 'object' || obj === null) {
+            return obj
+        }
+        if(map.has(obj)) {
+            return map.get(obj)
+        }
+        const res = Array.isArray(obj) ? [] : {}
+        map.set(obj,res)
+        for(let i in obj) {
+            if(obj.hasOwnProperty(i)) { // 只要是自主属性全部递归
+                res[i] = deepCopy(obj[i],map)
+            }
+        }
+        return res
+    }
+```
