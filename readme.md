@@ -1,5 +1,7 @@
 ### 这是一个刷题笔记
 
+```
+
 1、实现call
 2、实现apply
 3、实现bind
@@ -17,6 +19,8 @@
 15、实现promise
 16、实现promise基础api all any allsettled race catch finally resolve reject
 17、实现async await
+
+```
 
 ### 重点
 防抖 
