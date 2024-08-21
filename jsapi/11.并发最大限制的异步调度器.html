@@ -8,6 +8,7 @@
   <body></body>
 </html>
 <script>
+    // 顺序执行 超过最大限制 用promise卡着,前面的promise执行完毕 再执行执行栈里的函数 
   class Scheduler {
     constructor(count) {
         this.max = count
