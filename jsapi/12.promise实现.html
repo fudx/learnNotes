@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+// let p1 = new Promise((resolve,reject)=>{
+//     resolve('success')
+//     reject('fail')
+// })
+
+// let p2 = new Promise((resolve,reject)=>{
+//     reject('fail')
+//     resolve('success')
+// })
+
+// let p3 = new Promise((resolve,reject)=>{
+//     throw new Error('error')
+// })
+
+// console.log(p1)
+// console.log(p2)
+// console.log(p3)
+
+// class myPromise {
+//     constructor(fn) {
+//         this.state = 'pending'
+//         this.result = undefined
+//         const resolve = (value) => {
+//             if(this.state === 'pending') {
+//                 this.state = 'fulfilled'
+//                 this.result = value
+//             }
+//         }
+//         const reject = (reason) => {
+//             if(this.state === 'pending') {
+//                 this.state = 'rejected'
+//                 this.result = reason
+//             }
+//         }
+//         try {
+//             fn(resolve,reject)
+//         } catch (error) {
+//             reject(error)
+//         }
+//     }
+// }
+// let p11 = new myPromise((resolve,reject)=>{
+//     resolve('success')
+//     reject('fail')
+// })
+
+// let p21 = new myPromise((resolve,reject)=>{
+//     reject('fail')
+//     resolve('success')
+// })
+
+// let p31 = new myPromise((resolve,reject)=>{
+//     throw new Error('error')
+// })
+
+// console.log(p11)
+// console.log(p21)
+// console.log(p31)
+
+// 实现then 方法的处理成功和失败的回调
+// 处理异步任务
+// class myPromise {
+//     constructor(fn) {
+//         this.state = 'pending'
+//         this.result = undefined
+//         this.fulfilledcbs = []
+//         this.rejectedcbs = []
+//         const resolve = (value) => {
+//             if(this.state === 'pending') {
+//                 this.state = 'fulfilled'
+//                 this.result = value
+//                 this.fulfilledcbs.forEach(cb=>cb(value))
+//             }
+//         }
+//         const reject = (reason) => {
+//             if(this.state === 'pending') {
+//                 this.state = 'rejected'
+//                 this.result = reason
+//                 this.rejectedcbs.forEach(cb=>cb(value))
+//             }
+//         }
+//         try {
+//             fn(resolve,reject)
+//         } catch (error) {
+//             reject(error)
+//         }
+//     }
+//     then(onFulfilled,onRejected) {
+//         if(this.state === 'fulfilled') {
+//             onFulfilled(this.result)
+//         }
+//         else if(this.state === 'rejected') {
+//             onRejected(this.result)
+//         }
+//         else if(this.state === 'pending') {
+//             this.fulfilledcbs.push(onFulfilled)
+//             this.rejectedcbs.push(onFulfilled)
+//         }
+//     }
+// }
+// // 案例
+// const promise = new myPromise((resolve,reject)=>{
+//     setTimeout(()=>{
+//         resolve(20)
+//     })
+// })
+// promise.then(res=>{
+//     console.log(res)
+// },rej=>{
+//     console.log(rej)
+// })
+
+// 支持链式调用 和 返回一个promise
+class myPromise {
+    constructor(fn) {
+        this.state = 'pending'
+        this.result = undefined
+        this.fulfilledcbs = []
+        this.rejectedcbs = []
+        const resolve = (value) => {
+            if(this.state === 'pending') {
+                this.state = 'fulfilled'
+                this.result = value
+                this.fulfilledcbs.forEach(cb=>cb(value))
+            }
+        }
+        const reject = (reason) => {
+            if(this.state === 'pending') {
+                this.state = 'rejected'
+                this.result = reason
+                this.rejectedcbs.forEach(cb=>cb(reason))
+            }
+        }
+        try {
+            fn(resolve,reject)
+        } catch (error) {
+            reject(error)
+        }
+    }
+    then(onFulfilled,onRejected) {
+        return new myPromise((resolve,reject)=>{
+            const resolvePromise = cb => {
+                try {
+                    const val = cb(this.result)
+                    if( val instanceof myPromise) {
+                        val.then(resolve,reject)
+                    } else {
+                        resolve(val) // 为什么都用resolve 因为then里没有reject 只有通过抛错执行 rejected
+                    }
+                } catch (error) {
+                    reject(error)
+                }
+            }
+            if(this.state === 'fulfilled') {
+                resolvePromise(onFulfilled)
+            }
+            else if(this.state === 'rejected') {
+                resolvePromise(onRejected)
+
+            }
+            else if(this.state === 'pending') {
+                this.fulfilledcbs.push(resolvePromise.bind(this,onFulfilled))
+                this.rejectedcbs.push(resolvePromise.bind(this,onRejected))
+            }
+        })
+       
+    }
+}
+// 案例
+const promise = new myPromise((resolve,reject)=>{
+    setTimeout(()=>{
+        reject(20)
+    })
+})
+promise.then(res=>{
+    console.log(res)
+},rej=>{
+    console.log(rej,'rej')
+    // return rej
+    throw 20
+}).then(res=>{
+    console.log('dierci',res)
+},rej=>{
+    console.log('第二次',rej)
+}).then(res=>{
+    console.log('一直执行？')
+})
+</script>
