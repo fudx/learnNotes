@@ -150,6 +150,8 @@ class myPromise {
         }
     }
     then(onFulfilled,onRejected) {
+        onFulfilled = typeof onFulfilled === "function" ? onFulfilled : (res)=>{return res}
+        onRejected = typeof onRejected === 'function'? onRejected : (reason)=>{throw reason}
         return new myPromise((resolve,reject)=>{
             const resolvePromise = cb => {
                 try {
@@ -178,23 +180,11 @@ class myPromise {
        
     }
 }
-// 案例
-const promise = new myPromise((resolve,reject)=>{
-    setTimeout(()=>{
-        reject(20)
-    })
-})
-promise.then(res=>{
-    console.log(res)
-},rej=>{
-    console.log(rej,'rej')
-    // return rej
-    throw 20
-}).then(res=>{
-    console.log('dierci',res)
-},rej=>{
-    console.log('第二次',rej)
-}).then(res=>{
-    console.log('一直执行？')
-})
+// 链式调用
+const test1 = new Promise((res,rej)=>{
+     res(20)
+  })
+  test1.then(res=>res).then(res=>{
+    console.log(res,'结果')
+  })
 </script>

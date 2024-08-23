@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise各种api</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+Promise.prototype.myfinally = function (cb) {
+    return this.then(res=>{
+        return Promise.resolve(cb()).then(res=>res)
+    },rej=>{
+        return Promise.resolve(cb()).then(res=>{throw res})
+    })
+}
+new Promise((resolve, reject) => {
+    setTimeout(() => resolve('Success'), 1000);
+})
+.then(result => {
+    console.log(result);  // 输出: Success
+    throw result;
+})
+.catch(error => {
+    console.error(error);
+})
+.myfinally(() => {  
+    console.log('Cleanup');  // 无论 `Promise` 成功还是失败，都会执行这句
+    throw 's'
+}).then(res=>{
+    console.log(res,'res')
+},rej=>{
+    console.log(rej)
+})
+Promise.prototype.myall = function (arr) {
+    let index = 0
+    let newArr =  []
+    return new Promise((resolve,reject)=>{
+        for(let i = 0; i < arr.length; i++){
+            Promise.resolve(arr[i]).then(res=>{
+                index++
+                newArr[i] = res
+                if(index === arr.length) {
+                    resolve(newArr)
+                }
+            },rej=>{
+                reject(rej)
+            })
+        }
+    })
+}
+Promise.prototype.race = function (arr) {
+    let index = 0
+    let newArr =  []
+    return new Promise((resolve,reject)=>{
+        for(let i = 0; i < arr.length; i++){
+            Promise.resolve(arr[i]).then(resolve,reject)
+        }
+    })
+}
+Promise.prototype.myallSettle = function (arr) {
+    let index = 0
+    let newArr =  []
+    return new Promise((resolve,reject)=>{
+        for(let i = 0; i < arr.length; i++){
+            Promise.resolve(arr[i]).then(res=>{
+                index++
+                newArr[i] = res
+                if(index === arr.length) {
+                    resolve(newArr)
+                }
+            },rej=>{
+                index++
+                newArr[i] = res
+                if(index === arr.length) {
+                    resolve(newArr)
+                }
+            })
+        }
+    })
+}
+Promise.prototype.myany = function (arr) {
+    let index = 0
+    let newArr =  []
+    return new Promise((resolve,reject)=>{
+        for(let i = 0; i < arr.length; i++){
+            Promise.resolve(arr[i]).then(res=>{
+                resolve(res)
+            },rej=>{
+                index++
+                newArr[i] = res
+                if(index === arr.length) {
+                    reject(newArr)
+                }
+            })
+        }
+    })
+}
+</script>
