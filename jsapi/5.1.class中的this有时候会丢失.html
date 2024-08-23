@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+    class MyClass {
+      constructor(name) {
+        this.name = name;
+        this.greet = this.greet.bind(this); // 保证此时 this.greet 永远指向 实例 
+      }
+  
+      greet() {
+        console.log(`Hello, ${this.name}!`);
+      }
+    }
+    this.name = 'ffff'
+    const obj = new MyClass("Alice");
+    setTimeout(obj.greet, 1000); // 这里的 this 被绑定为 obj
+    // 总结就是可以会被外部调用比如bind之类的 
+  </script>
