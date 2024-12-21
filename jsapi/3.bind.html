@@ -17,6 +17,8 @@ Function.prototype.myBind = function (content,...args1) {
     }
     if(self.prototype) { // **！返回函数即使fn 如果修改fn.prototype.xxx = 12 那么也会使其他实例修改 比如vue2 那个data()
         fn.prototype = Object.create(self.prototype)
+        // fn.prototype = self.prototype
+
     }
     return fn
 }
@@ -35,14 +37,14 @@ function Person(name) {
     this.name = name;
 }
 const BoundPerson = Person.myBind(null);
-// BoundPerson.prototype.age = 12 这里会对应上面的**！
+BoundPerson.prototype.age = 12 //这里会对应上面的**！
 const newPerson = new BoundPerson('Bob');
 console.log(newPerson.name);  // 输出: "Bob"
 
 // **!
-// const FnPerson =  Person.myBind(null);
-// const newFnPerson = new FnPerson('alice')
-// console.log(newFnPerson.age)
+const FnPerson =  Person.myBind(null);
+const newFnPerson = new FnPerson('alice')
+console.log(newFnPerson.age)
 
 
 

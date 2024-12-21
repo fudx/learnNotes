@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+function deepEqual(obj1, obj2) {
+    // 处理 null 或 undefined 的情况
+    if (obj1 === obj2) {
+        return true;
+    }
+
+    // 处理不同类型的情况
+    if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+        return false;
+    }
+
+    // 获取对象的键
+    let keys1 = Object.keys(obj1);
+    let keys2 = Object.keys(obj2);
+
+    // 如果键的数量不同，则对象不相等
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+
+    // 检查每个键是否存在于另一个对象中，并且值是否相等
+    for (let key of keys1) {
+        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// 示例使用
+let objA = { a: 1, b: { c: 2 } };
+let objB = { a: 1, b: { c: 2 } };
+let objC = { a: 1, b: { c: 3 } };
+
+console.log(deepEqual(objA, objB)); // true
+console.log(deepEqual(objA, objC)); // false
+</script>

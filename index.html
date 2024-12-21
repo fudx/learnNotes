@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+    Function.prototype.mycall = function(content,...args) {
+        content = content || window
+        const symbol = Symbol()
+        content[symbol] = this
+        const result = content[symbol(...args)]
+        delete content[symbol]
+        return result
+    }
+    var obj = {
+        
+    }
+</script>

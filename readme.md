@@ -28,3 +28,63 @@ ajax
 
 ## 
 插叙
+
+###
+### 6
+```
+  // 柯里化
+  function add(...args1) {
+    // to do
+  }
+  console.log(
+    +add(1)(2)(3), // 6
+    +add(1, 2, 3) // 6
+  );
+```
+### 7 
+```
+//  promise封装ajax
+
+```
+### 深拷贝
+```
+function deepcopy(obj, map = new WeakMap()) {
+    
+  }
+  var sss = {
+    a: 2,
+    list: {
+      b: 3,
+      c: [1, 2, 3, 4],
+      d: {
+        e: 5,
+      },
+    },
+  };
+  const ans = deepcopy(sss);
+  console.log(ans);
+```
+### 11 
+
+```
+// 11.并发最大限制的异步调度器
+  class Scheduler {
+    add(promiseCreator) {}
+    // ...
+  }
+  const timeout = (time) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, time);
+    });
+
+  const scheduler = new Scheduler(2);
+  const addTask = (time, order) => {
+    scheduler.add(() => timeout(time)).then(() => console.log(order));
+  };
+
+  addTask(1000, "1");
+  addTask(500, "2");
+  addTask(300, "3");
+  addTask(400, "4");
+  // 2 3 1 4
+```

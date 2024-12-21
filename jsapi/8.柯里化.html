@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>柯里化</title>
-</head>
-<body>
-    
-</body>
+  </head>
+  <body></body>
 </html>
 <script>
-    function add(...args1){
-  	let list = []
-    list = [...args1]
-    function _add(...args2){
-    	list = [...list,...args2]
-      return _add
+  function add(...args1) {
+    let list = [];
+    list = [...args1];
+    function _add(...args2) {
+      list = [...list, ...args2];
+      return _add;
     }
-     _add.toString = function  () {
-      	return list.reduce((pre,cur)=>pre+cur,0)
-     }
-     return _add
-}
-console.log(
-+add(1)(2)(3), // 6
-+add(1,2,3) // 6
-)
+    _add.toString = function () {
+      return list.reduce((pre, cur) => pre + cur, 0);
+    };
+    return _add;
+  }
+  console.log(
+    +add(1)(2)(3), // 6
+    +add(1, 2, 3) // 6
+  );
 </script>
