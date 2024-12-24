@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+     function lis(arr) {
+    const p = arr.slice();
+    const ans = [arr[0]];
+    for (let i = 0; i < arr.length; i++) {
+      if (ans[ans.length - 1] < arr[i]) {
+        p[arr[i]] = ans[ans.length - 1] // vue3 存的是下标 返回也是下标  一般我们是返回元
+        ans.push(arr[i]);
+      } else {
+        let l = 0,
+          r = ans.length - 1;
+        while (l < r) {
+          const mid = (l + r) >> 1;
+          if (ans[mid] < arr[i]) {
+            l = mid + 1;
+          } else {
+            r = mid;
+          }
+        }
+        if (l > 0) {
+          p[arr[i]] = ans[l - 1]
+        }
+        ans[l] = arr[i];
+      }
+    }
+    let len = ans.length - 1;
+    let j = ans[len - 1];
+    while ( len-- > 0) {
+      ans[len] = j;
+      j = p[j];
+    }
+    return ans;
+  }
+  console.log(lis([10, 9, 2, 5, 3, 7, 101, 18, 1])); // 2 3 7 18
+</script>
